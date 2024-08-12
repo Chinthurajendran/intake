@@ -1,0 +1,62 @@
+select employee_name,salary from employees where salary = (select max(salary) from employees);
+
+select department_name,count(employees.employee_id) from department inner join employees on 
+department.department_id = employees.departments group by department.department_name;
+
+ select department_name,count(employeess.employee_id) from department inner join employeess on 
+ department.department_id = employeess.employee_id group by department.department_id;
+
+SELECT employee_name
+FROM employees 
+WHERE salary = (SELECT MIN(salary) FROM employees);
+
+
+postgres=# select max(salary) from employee 
+where salary < (select max(salary) from employee);
+
+create table sons(id bigint,name varchar(20),father_id 
+bigint,foreign key (father_id) references fathers(father_id));
+
+
+select department_name from department where department_id = 
+any (select department_id from employeess where salary > 50000);
+
+select department.department_name from department 
+where exists(select employee_id from employeess where department_id = department.department_id);
+
+select first_name,case when salary < 50000 then 'low' when salary > 50000 then 'hight' else 'normal' end from employeess;
+
+
+
+-- after
+postgres=# create or replace function update() returns trigger as $$
+postgres$# begin
+postgres$# raise notice 'salary is updated name:%,new_salary:%',new.first_name,new.salary;
+postgres$# return new;
+postgres$# end;
+postgres$# $$ language plpgsql;
+
+postgres=# create trigger trigger_update
+postgres-# after update of salary on employeess
+postgres-# for each row
+postgres-# execute function update();
+
+-- befor
+//CREATE FUNCTION//
+company=# create or replace function def_job_id() returns trigger as $$
+company$# begin
+company$# if new.job_id is null then new.job_id = 'GEN_REP';
+company$# end if;
+company$# return new;
+company$# end;
+company$# $$ language plpgsql;
+
+
+//CREATE TRIGGER//
+company=# create trigger job_id
+company-# before insert on  employees
+company-# for each row
+company-# execute function def_job_id();
+
+
+ alter table sons add constraint fk_father_id foreign key(father_id) references fatherss(fathers_id);

@@ -1,0 +1,20 @@
+>>> data = page_data.objects.filter(salary__gt= 20000).aggregate(count=Count(F('salary'))) 
+>>> data = page_data.objects.annotate(value =Count('bones',filter=Q(salary__gt = 10000)))
+>>> data = page_data.objects.annotate(value = Sum('salary')+Sum('bones'))
+>>> page_data.objects.aggregate(total = Avg('bones'))
+>>> page_data.objects.order_by(F('bones'))
+>>> page_data.objects.exclude(name = 'chinthu')
+>>> data =[page_data(name='f',address= 'f',email ='g')]
+>>> page_data.objects.bulk_create(data)
+>>> page_data.objects.filter(name__contains='chinthu') 
+>>> Book.objects.get(author__name = 'J.K.Rowling')
+>>> Author.objects.filter(id=1).update(name='J.K.Rowling')  
+>>> Book.objects.filter(Q(author__name = 'J.K.Rowling') & Q(publication_year=1997)) 
+
+>>> Book.objects.select_related('author').all()
+>>> Book.objects.select_related('author').get(author__name = 'J.K.Rowling') 
+data = Book.objects.select_related('author')
+for book in data:
+    print(f'{book.author.name}, {book.title}')
+
+
